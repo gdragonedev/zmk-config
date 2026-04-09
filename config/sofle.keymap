@@ -6,18 +6,19 @@
 
 
 #define BASE 0
-#define L 1
-#define R 2
+#define LOW 1
+#define RAI 2
 #define ALT 3
 / {
     macros {
         CTV: m_copy_newTab_paste {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings =
-                <&macro_press &kp CTRL>,
-                <&macro_tap &kp C &kp T &kp V>,
-                <&macro_release &kp CTRL>;
+            bindings 
+                = <&macro_press &kp LCTRL>
+                , <&macro_tap &kp C &kp T &kp V>
+                , <&macro_release &kp LCTRL>
+                ;
 
             label = "CTV";
         };
@@ -83,7 +84,7 @@
            &kp LSHIFT  &kp Z      &XHT X     &CHT C     &VHT V     &kp B                &kp RIGHT_ARROW            &kp N      &kp M      &kp SQT    &kp SEMI   &kp DOT    &kp RSHFT
         //╰──────────┴──────────┼──────────┼──────────┼──────────┼──────────┼──────────╮    ├────┤    ╭──────────┼──────────┼──────────┼──────────┼──────────┼──────────┴──────────╯
         //╭ENCDR_BTN╮           │  LALT    │  LGUI    │  LCTRL   │  SPC     │  PG_DN/L │    │BTN │    │  PG_UP/R │  BSPC    │  Menu    │  RGUI    │  DEL     │
-           &kp C_MUTE             &kp LALT   &kp LGUI  &kp LCTRL  &kp SPACE  &lt L PG_DN  &kp ENTER    &lt R PG_UP &kp BSPC  &kp K_APP   &kp RGUI   &kp DEL
+           &kp C_MUTE             &kp LALT   &kp LGUI  &kp LCTRL  &kp SPACE  &lt LOW PG_DN &kp ENTER   &lt RAI PG_UP &kp BSPC &kp K_APP  &kp RGUI   &kp DEL
         //╰─────────╯           ╰──────────┴──────────┴──────────┴──────────┴──────────╯    ╰────╯    ╰──────────┴──────────┴──────────┴──────────┴──────────╯
             >;
 
@@ -155,7 +156,7 @@
            &kp LSHIFT  &XHT X     &kp Q      &kp M      &kp W      &kp Z                &kp RIGHT_ARROW            &kp K      &kp P      &kp SQT    &kp SEMI   &kp DOT    &to BASE
         //╰──────────┴──────────┼──────────┼──────────┼──────────┼──────────┼──────────╮    ├────┤    ╭──────────┼──────────┼──────────┼──────────┼──────────┼──────────┴──────────╯
         //╭ENCDR_BTN╮           │  LALT    │  LGUI    │  LCTRL   │ SPC/LOWER│  PG_DN   │    │BTN │    │  PG_UP   │BACKSPACE │  Menu    │  RGUI    │  DEL     │
-           &kp C_MUTE             &kp LALT   &kp LGUI  &kp LCTRL  &kp SPACE  &lt L PG_DN  &kp ENTER    &lt R PG_UP &kp BSPC  &kp K_APP   &kp RGUI   &kp DEL
+           &kp C_MUTE             &kp LALT   &kp LGUI  &kp LCTRL  &kp SPACE  &lt LOW PG_DN &kp ENTER   &lt RAI PG_UP &kp BSPC &kp K_APP  &kp RGUI   &kp DEL
         //╰─────────╯           ╰──────────┴──────────┴──────────┴──────────┴──────────╯    ╰────╯    ╰──────────┴──────────┴──────────┴──────────┴──────────╯
             >;
 
