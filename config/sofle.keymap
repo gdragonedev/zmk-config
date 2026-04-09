@@ -1,0 +1,165 @@
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/bt.h>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/outputs.h>
+#include <dt-bindings/zmk/rgb.h>
+
+
+#define BASE 0
+#define L 1
+#define R 2
+#define ALT 3
+/ {
+    macros {
+        CTV: m_copy_newTab_paste {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings =
+                <&macro_press &kp CTRL>,
+                <&macro_tap &kp C &kp T &kp V>,
+                <&macro_release &kp CTRL>;
+
+            label = "CTV";
+        };
+        // Adjust to LG() for macOS
+        m_Cut: m_Cut {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp LC(X)>;
+        };
+        m_Copy: m_Copy {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp LC(C)>;
+        };
+        m_Paste: m_Paste {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp LC(V)>;
+        };
+    };
+
+    behaviors {
+        XHT: b_cut_hold_tap {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred"; // or "balanced"
+            tapping-term-ms = <200>;
+            bindings = <&m_Cut>, <&kp>;
+        };
+        CHT: b_copy_hold_tap {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred"; // or "balanced"
+            tapping-term-ms = <200>;
+            bindings = <&m_Copy>, <&kp>;
+        };
+        VHT: b_paste_hold_tap {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred"; // or "balanced"
+            tapping-term-ms = <200>;
+            bindings = <&m_Paste>, <&kp>;
+        };
+    };
+
+    keymap {
+        compatible = "zmk,keymap";
+
+        default_layer {
+            display-name = "base";
+            bindings = <
+        //╭──────────┬──────────┬──────────┬──────────┬──────────┬──────────╮               ╭JOY─╮               ╭──────────┬──────────┬──────────┬──────────┬──────────┬──────────╮
+        //│  -       │  1       │  2       │  3       │  4       │  5       │               │ UA │               │  6       │  7       │  8       │  9       │  0       │  =       │
+            &kp MINUS  &kp N1     &kp N2     &kp N3     &kp N4     &kp N5                &kp UP_ARROW              &kp N6     &kp N7     &kp N8     &kp N9     &kp N0     &kp EQUAL
+        //├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤               ├────┤               ├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤
+        //│ TAB      │  Q       │  w       │  E       │  R       │  T       │               │ DA │               │  Y       │  U       │  I       │  O       │  P       │  |       │
+            &kp TAB    &kp Q      &kp W      &kp E      &kp R      &kp T                &kp DOWN_ARROW             &kp Y      &kp U      &kp I      &kp O      &kp P      &kp PIPE
+        //├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤               ├────┤               ├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤
+        //│  ESC     │  A       │  S       │  D       │  F       │  G       │               │ LA │               │  H       │  J       │  K       │  L       │ , <      │ / ?      │
+            &kp ESC    &kp A      &kp S      &kp D      &kp F      &kp G                &kp LEFT_ARROW             &kp H      &kp J      &kp K      &kp L      &kp COMMA  &kp FSLH
+        //├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤               ├────┤               ├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤
+        //│ SHIFT    │  Z       │  X       │  C       │  V       │  B       │               │ RA │               │  N       │  M       │ ' "      │ ; :      │ . >      │ SHIFT    │
+           &kp LSHIFT  &kp Z      &XHT X     &CHT C     &VHT V     &kp B                &kp RIGHT_ARROW            &kp N      &kp M      &kp SQT    &kp SEMI   &kp DOT    &kp RSHFT
+        //╰──────────┴──────────┼──────────┼──────────┼──────────┼──────────┼──────────╮    ├────┤    ╭──────────┼──────────┼──────────┼──────────┼──────────┼──────────┴──────────╯
+        //╭ENCDR_BTN╮           │  LALT    │  LGUI    │  LCTRL   │  SPC     │  PG_DN/L │    │BTN │    │  PG_UP/R │  BSPC    │  Menu    │  RGUI    │  DEL     │
+           &kp C_MUTE             &kp LALT   &kp LGUI  &kp LCTRL  &kp SPACE  &lt L PG_DN  &kp ENTER    &lt R PG_UP &kp BSPC  &kp K_APP   &kp RGUI   &kp DEL
+        //╰─────────╯           ╰──────────┴──────────┴──────────┴──────────┴──────────╯    ╰────╯    ╰──────────┴──────────┴──────────┴──────────┴──────────╯
+            >;
+
+            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
+        };
+
+        lower_layer {
+            display-name = "left";
+            bindings = <
+        //╭──────────┬──────────┬──────────┬──────────┬──────────┬──────────╮               ╭JOY─╮               ╭──────────┬──────────┬──────────┬──────────┬──────────┬──────────╮
+        //│  F12     │  F1      │  F2      │  F3      │  F4      │  F5      │               │ UA │               │  F6      │  F7      │  F8      │  F9      │  F10     │  F11
+            &kp F12    &kp F1     &kp F2     &kp F3     &kp F4     &kp F5                &kp UP_ARROW              &kp F6     &kp F7     &kp F8     &kp F9     &kp F10    &kp F11     
+        //├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤               ├────┤               ├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤
+        //│  ` ~     │          │          │          │          │ CTV      │               │ DA │               │          │          │          │          │          │          │
+            &kp GRAVE  &trans     &trans     &trans     &trans     &CTV                 &kp DOWN_ARROW             &trans     &trans     &trans     &trans     &trans     &trans
+        //├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤               ├────┤               ├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤
+        //│          │          │          │          │          │          │               │ LA │               │          │          │          │          │          │          │
+            &trans     &trans     &trans     &trans     &trans     &trans               &kp LEFT_ARROW             &trans     &trans     &trans     &trans     &trans     &trans
+        //├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤               ├────┤               ├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤
+        //│ SHIFT    │          │          │          │          │          │               │ RA │               │          │          │          │          │          │          │
+            &kp LSHFT  &trans     &trans     &trans     &trans     &trans               &kp RIGHT_ARROW            &trans     &trans     &trans     &trans     &trans     &trans
+        //╰──────────┴──────────┼──────────┼──────────┼──────────┼──────────┼──────────╮    ├────┤    ╭──────────┼──────────┼──────────┼──────────┼──────────┼──────────┴──────────╯
+        //╭ENCDR_BTN╮           │          │          │          │          │ [ORIGIN] │    │BTN │    │          │          │          │          │          │
+           &kp C_MUTE             &trans     &trans     &trans     &trans     &trans      &kp ENTER     &trans     &trans     &trans     &trans     &trans
+        //╰─────────╯           ╰──────────┴──────────┴──────────┴──────────┴──────────╯    ╰────╯    ╰──────────┴──────────┴──────────┴──────────┴──────────╯
+            >;
+
+            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
+        };
+
+        raise_layer {
+            display-name = "right";
+            bindings = <
+        //╭──────────┬──────────┬──────────┬──────────┬──────────┬──────────╮               ╭JOY─╮               ╭──────────┬──────────┬──────────┬──────────┬──────────┬──────────╮
+        //│          │          │          │          │          │          │               │ UA │               │  BT_CLR  │ BT_SEL 0 │ BT_SEL 1 │ BT_SEL 2 │ BT_SEL 3 │ BT_SEL 4 │
+            &trans     &trans     &trans     &trans     &trans     &trans                  &kp PG_UP            &bt BT_CLR &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_SEL 4     
+        //├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤               ├────┤               ├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤
+        //│          │          │          │          │          │          │               │ DA │               │          │          │          │          │          │          │
+            &trans     &trans     &trans     &trans     &trans     &trans                  &kp PG_DN               &trans     &trans     &trans     &trans     &trans     &trans
+        //├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤               ├────┤               ├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤
+        //│          │          │          │          │          │          │               │ LA │               │  LEFT    │  DOWN    │  UP      │  RIGHT   │          │          │
+            &trans     &trans     &trans     &trans     &trans     &trans                  &kp HOME                &kp LEFT   &kp DOWN   &kp UP     &kp RIGHT  &trans     &trans
+        //├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤               ├────┤               ├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤
+        //│          │          │          │          │          │          │               │ RA │               │          │          │          │          │          │  ALT     │
+            &trans     &trans     &trans     &trans     &trans     &trans                   &kp END                &trans     &trans     &trans     &trans     &trans     &to ALT
+        //╰──────────┴──────────┼──────────┼──────────┼──────────┼──────────┼──────────╮    ├────┤    ╭──────────┼──────────┼──────────┼──────────┼──────────┼──────────┴──────────╯
+        //╭ENCDR_BTN╮           │          │          │          │          │          │    │BTN │    │ [ORIGIN] │          │          │          │          │
+           &kp C_MUTE             &trans     &trans     &trans     &trans     &trans      &kp ENTER     &trans     &trans     &trans     &trans     &trans
+        //╰─────────╯           ╰──────────┴──────────┴──────────┴──────────┴──────────╯    ╰────╯    ╰──────────┴──────────┴──────────┴──────────┴──────────╯
+            >;
+
+            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
+        };
+
+        alt_layer {
+            display-name = "gallium";
+            bindings = <
+        //╭──────────┬──────────┬──────────┬──────────┬──────────┬──────────╮               ╭JOY─╮               ╭──────────┬──────────┬──────────┬──────────┬──────────┬──────────╮
+        //│  -       │  1       │  2       │  3       │  4       │  5       │               │ UA │               │  6       │  7       │  8       │  9       │  0       │  =       │
+            &kp MINUS  &kp N1     &kp N2     &kp N3     &kp N4     &kp N5                &kp UP_ARROW              &kp N6     &kp N7     &kp N8     &kp N9     &kp N0     &kp EQUAL
+        //├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤               ├────┤               ├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤
+        //│ TAB      │  B       │  L       │  D       │  C       │  V       │               │ DA │               │  J       │  F       │  O       │  U       │  , <     │  / ?     │
+            &kp TAB    &kp B      &kp L      &kp D      &CHT C     &VHT V               &kp DOWN_ARROW             &kp J      &kp F      &kp O      &kp U      &kp COMMA  &kp FSLH
+        //├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤               ├────┤               ├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤
+        //│  ESC     │  N       │  R       │  T       │  S       │  G       │               │ LA │               │  Y       │  H       │  A       │  E       │  I       │ \ |      │
+            &kp ESC    &kp N     &kp R       &kp T      &kp S      &kp G                &kp LEFT_ARROW             &kp Y      &kp H      &kp A      &kp E      &kp I      &kp PIPE
+        //├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤               ├────┤               ├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤
+        //│ SHIFT    │  X       │  Q       │  M       │  W       │  Z       │               │ RA │               │  K       │  P       │ ' "      │ ; :      │ . >      │  BASE    │
+           &kp LSHIFT  &XHT X     &kp Q      &kp M      &kp W      &kp Z                &kp RIGHT_ARROW            &kp K      &kp P      &kp SQT    &kp SEMI   &kp DOT    &to BASE
+        //╰──────────┴──────────┼──────────┼──────────┼──────────┼──────────┼──────────╮    ├────┤    ╭──────────┼──────────┼──────────┼──────────┼──────────┼──────────┴──────────╯
+        //╭ENCDR_BTN╮           │  LALT    │  LGUI    │  LCTRL   │ SPC/LOWER│  PG_DN   │    │BTN │    │  PG_UP   │BACKSPACE │  Menu    │  RGUI    │  DEL     │
+           &kp C_MUTE             &kp LALT   &kp LGUI  &kp LCTRL  &kp SPACE  &lt L PG_DN  &kp ENTER    &lt R PG_UP &kp BSPC  &kp K_APP   &kp RGUI   &kp DEL
+        //╰─────────╯           ╰──────────┴──────────┴──────────┴──────────┴──────────╯    ╰────╯    ╰──────────┴──────────┴──────────┴──────────┴──────────╯
+            >;
+
+            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
+        };
+    };
+};
